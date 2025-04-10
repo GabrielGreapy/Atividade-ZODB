@@ -1,4 +1,4 @@
-from models import Estoque
+from models import *
 import ZODB, ZODB.FileStorage
 import transaction
 
@@ -35,10 +35,10 @@ while True:
     
     elif opcao == '2':
         print("\n Produtos no estoque:")
-        estoque.listar_Produtos()
+        Estoque.listar_Produtos()
 
     elif opcao == '3':
-        estoque.listar_Produtos()
+        Estoque.listar_Produtos()
         produto = input("Qual produto você quer checar validade?")
 
 

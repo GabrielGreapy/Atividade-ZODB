@@ -87,9 +87,78 @@ class Carrinhos_Da_Loja(Persistent):
             print("Não há itens no carrinho")
             return
         else:
-            del self.item_No_Carrinho(item)
+            del self.itens_No_Carrinho[item]
             self._p_changed = 1
             print("Item deletado")
+
+
+class Biblioteca(Persistent):
+    def __init__(self):
+        self.lista_Livros = PersistentList()
+
+    def adicionar_Livro(self, nome):
+        livro = Livro(nome)
+        self.lista_Livros.append(livro)
+
+class Livro(Persistent):
+    def __init__(self, nome):
+        self.nome = nome
+        self.situacao = "Disponivel"
+        
+        
+
+    def emprestar(self):
+        if self.situacao == "Emprestado":
+            print("Livro já está emprestado")
+        else:
+            self.situacao = "Emprestado"
+            self._p_changed = 1
+
+    def devolver(self):
+        if self.situacao == "Emprestado":
+            self.situacao = "Disponivel"
+            self._p_changed = 1
+            print("Livro devolvido")
+        else: print("O livro já está disponivel")
+
+
+class Escola(Persistent):
+    def __init__(self):
+        self.lista_Turma = PersistentList()
+
+    def adicionar_Turma(self, nome):
+        turma = Aluno(nome)
+        self.lista_Turma.append(turma)
+        self._p_changed = 1
+        print("Turma adicionada")
+    
+    
+class Turma(Persistent):
+    def __init__(self, nome):
+        self.nome_Turma = nome
+        self.lista_Alunos = PersistentList()
+    
+    def adicionar_Aluno(self, nome):
+        aluno = Aluno(nome)
+        self.lista_Alunos.append(aluno)
+        self._p_changed = 1
+        print("Aluno adicionado")
+
+
+class Aluno(Persistent):
+    def __init__(self, nome):
+        self.nome_Aluno = nome
+        self.presenca = "Indefinido"
+    
+    def presente(self):
+        self.presenca = "Presente"
+        self._p_changed = 1
+        print("Presente!")
+
+    def faltou(self):
+        self.presenca = "Faltou"
+        self._p_changed = 1
+        print("...Faltou")
 
         
         
