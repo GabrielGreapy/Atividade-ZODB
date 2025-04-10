@@ -21,14 +21,14 @@ class Estoque(Persistent):
             print("Índice inválido.")
 
 
-        def listar_Produtos(self):
-            if not self.estoque:
-                print("Estoque vazio.")
-                return
+    def listar_Produtos(self):
+        if not self.estoque:
+            print("Estoque vazio.")
+            return
 
-            print("\n Produtos no estoque:")
-            for i, produto in enumerate(self.estoque):
-                print(f"{i}. {produto.nome} | Validade: {produto.validade} | Quantidade: {produto.estoque}")
+        print("\n Produtos no estoque:")
+        for i, produto in enumerate(self.estoque):
+            print(f"{i}. {produto.nome} | Validade: {produto.validade} | Quantidade: {produto.estoque}")
 
 
 class Produto(Persistent):
@@ -48,11 +48,15 @@ class Produto(Persistent):
 
     def checar(self):
         hoje = datetime.now()
-        x = self.data - hoje
-        if x.total_seconds() <= 691200: 
-            print('O produto está a menos de 8 dias perto de vencer')
-        else: print("O produto está a mais de 8 dias para vencer")
-
+        try:
+            validade_data = datetime.strptime(self.validade, "%d/%m/%Y")
+            dias_restantes = (validade_data - hoje).days
+            if dias_restantes <= 8:
+                print('O produto está a menos de 8 dias de vencer')
+            else:
+                print("O produto está a mais de 8 dias para vencer")
+        except ValueError:
+            print("Formato de data inválido. Use dd/mm/yyyy")
     
 class Loja(Persistent):
     def __init__(self):
@@ -78,8 +82,8 @@ class Carrinhos_Da_Loja(Persistent):
         if not self.itens_No_Carrinho:
             return
         else: 
-            for i,  in enumerate(self.itens_No_Carrinho):
-                print(f"{i + 1}: {self.itens_No_Carrinho[i]}")
+            for i, item  in enumerate(self.itens_No_Carrinho):
+                print(f"{i + 1}: {item}")
 
 
     def remove_Item_Ao_Carrinho(self, item):
@@ -127,7 +131,7 @@ class Escola(Persistent):
         self.lista_Turma = PersistentList()
 
     def adicionar_Turma(self, nome):
-        turma = Aluno(nome)
+        turma = Turma(nome)
         self.lista_Turma.append(turma)
         self._p_changed = 1
         print("Turma adicionada")
